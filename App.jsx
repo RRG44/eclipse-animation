@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Animated, TouchableOpacity } from 'react-native';
 
-const size = 300;
+const size = 200;
+const sizeBig = 300;
 
 export default function App() {
 
@@ -13,7 +14,17 @@ export default function App() {
 
   const moonLeft = moonAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [-size, -parseInt(size*.2)]
+    outputRange: [-sizeBig, -parseInt((size)*.2)]
+  });
+
+  const sunLight = moonAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#FDB81344", "#FDB81318"]
+  });
+
+  const skyColor = moonAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#3d85c6", "#011221"]
   });
 
   const move = () => {
@@ -38,31 +49,34 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style = {styles.title}>March 8th, 2024 Eclipse 🌒🇲🇽!</Text>
+    <Animated.View style={[styles.container, {backgroundColor: skyColor}]}>
+      <Text style = {styles.title}>April 8th, 2024 Eclipse 🌒🇲🇽!</Text>
       <View style = {styles.eclipseContainer}>
+        <Animated.View style = {[styles.sunLight, {backgroundColor: sunLight}]}></Animated.View>
         <Animated.View style = {styles.sun}></Animated.View>
-        <Animated.View style = {[styles.moon, {transform: [{translateX: moonLeft}]}]}></Animated.View>
+        <Animated.View style = {[styles.moon, {transform: [{translateX: moonLeft}], backgroundColor: skyColor}]}></Animated.View>
       </View>
-      <TouchableOpacity style = {styles.button} onPress={active? move : moveBack}>
-        <Text style = {styles.text}>{active ? "Go!" : "Again"}</Text>
+      <TouchableOpacity style = {styles.button} onPress={!active?  move : moveBack}>
+        <Text style = {styles.text}>{!active ? "Go!" : "Again"}</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 100,
+    width: '80%',
+    textAlign: 'center',
+    lineHeight: 40,
   },
   text: {
     color: 'white',
@@ -79,8 +93,17 @@ const styles = StyleSheet.create({
     marginLeft: 100,
     position: 'absolute',
   },
+  sunLight: {
+    width: sizeBig,
+    height: sizeBig,
+    borderRadius: 300,
+    shadowRadius: 10,
+    shadowColor: "#fff",
+    marginLeft: 100,
+    position: 'absolute',
+    
+  },
   moon: {
-    backgroundColor: "black",
     width: size,
     height: size,
     borderRadius: 300,
@@ -89,8 +112,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'crimson',
-    width: 250,
-    height: 60,
+    width: 270,
+    height: 70,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
